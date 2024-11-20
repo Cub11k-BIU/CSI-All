@@ -62,7 +62,6 @@ int main() {
      * 3.3. (number & mask) applies the mask
      * The result is an int containing a value of the number with bit in position idx being unset
      * */
-    // specifically not reusing the mask value for better readability
     printf("Please enter a number:\n");
     // %d - decimal, pointer to an int
     scanf("%d", &number);
@@ -71,6 +70,7 @@ int main() {
     scanf("%hhd", &idx);
     mask = 1 << idx;
     printf("Number with bit %hhd set to 1: %d\n", idx, number | mask);
+    // not reusing the mask value for better readability, can be mask = ~mask;
     mask = ~(1 << idx);
     printf("Number with bit %hhd set to 0: %d\n", idx, number & mask);
 
@@ -128,11 +128,10 @@ int main() {
      * Print only 4 bits, in positions: 3,5,7,11 in the result.
      *
      * 6.1. To output the sum in hexadecimal(capitalized) we need to use the %X conversion specifier
-     * with the %l size specifier for long
-     * The result is a hexadecimal unsigned long int (%lX) containing value of the sum
+     * The result is a hexadecimal int (%X) containing value of the sum
      * 6.2. To output the bits in positions 3, 5, 7 and 11 we need to use the formula from task 1.
      * with idx=3, idx=5, idx=7 and idx=11
-     * The results are unsigned long ints (%lu) containing values of bits 3, 5, 7 and 11
+     * The results are ints (%d) containing values of bits 3, 5, 7 and 11
      * */
 
     /*
@@ -142,12 +141,17 @@ int main() {
      * */
     int firstNumber = 0;
     int secondNumber = 0;
+    /*
+     * It might be better to use long int for the sum of two integers in case
+     * of large numbers, but the task definition says nothing about how we should
+     * treat overflow or underflow, so I'll stick to int
+     * */
     int sum = 0;
     printf("Please enter the first number (octal):\n");
-    // %o - octal, should be a pointer to an unsigned int as per C99 standard
+    // %o - octal integer
     scanf("%o", &firstNumber);
     printf("Please enter the second number (octal):\n");
-    // %o - octal, should be a pointer to an unsigned int as per C99 standard
+    // %o - octal integer
     scanf("%o", &secondNumber);
     sum = firstNumber + secondNumber;
     printf("The sum in hexadecimal: %X\n", sum);
