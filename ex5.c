@@ -25,7 +25,6 @@
 #define STREAMS_DESCENDING_SORT_PLAYLIST_MENU_OPTION 3
 #define ALPHABETICAL_SORT_PLAYLIST_MENU_OPTION 4
 
-#define INPUT_ENDING_CHAR '\r' // should be \n duh, but it's submit lmao
 #define INITIAL_STRING_ALLOCATION_SIZE 1024
 #define STRING_REALLOCATION_MULTIPLIER 2
 
@@ -90,9 +89,12 @@ void playPlaylist(PlaylistDetails *playlist);
 
 // ------Playlist utilities------
 
+const char *endingChars = "\r\n";
+
 void playSong(SongDetails *song);
 SongNode *getSongById(SongNode *first, int songId);
 PlaylistNode *getPlaylistById(PlaylistNode *first, int playlistId);
+int isEndingChar(char c);
 void inputInfiniteString(char **string);
 
 // -----Comparator functions-----
@@ -454,6 +456,10 @@ PlaylistNode *getPlaylistById(PlaylistNode *first, int playlistId) {
     return current;
 }
 
+int isEndingChar(char c) {
+    return strchr(endingChars, c) != NULL;
+}
+
 /*
  * Input an infinitely (theoretically) long string into a pointer passed as an argument
  * Pointer value will be overwritten, any previously allocated memory will be lost
@@ -465,7 +471,7 @@ void inputInfiniteString(char **string) {
     *string = (char *) validatedMalloc(allocatedSize * sizeof(char));
     int length = 0;
     char c = '\0';
-    while (scanf("%c", &c) == 1 && c != INPUT_ENDING_CHAR) {
+    while (scanf("%c", &c) == 1 && !isEndingChar(c)) {
         (*string)[length] = c;
         length += sizeof(char);
         // If input is longer than the allocated memory - reallocate
