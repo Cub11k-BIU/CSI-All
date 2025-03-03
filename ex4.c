@@ -348,7 +348,12 @@ char recursiveParenthesisSearch() {
 void parenthesisBalanceValidation() {
     printf("Please enter a term for validation:\n");
     scanf(" ");
-    if (recursiveParenthesisSearch() == ENDING_CHAR) {
+    char result = recursiveParenthesisSearch();
+    // If input begins with closing parenthesis, then buffer is not cleaned inside the function
+    if (isClosingParenthesis(result, 0)) {
+        scanf("%*[^\n]");
+    }
+    if (isEndingChar(result)) {
         printf("The parentheses are balanced correctly.\n");
     } else {
         printf("The parentheses are not balanced correctly.\n");
